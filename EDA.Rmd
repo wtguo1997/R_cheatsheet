@@ -14,4 +14,8 @@ xlab = "  ", ylab = "  ", main="Main effect of treatment")
 
 # Box plot
 boxplot(len ~ supp * dose, data=dat, frame = FALSE, col = c("#00AFBB", "#E7B800"), ylab="Tooth Length")
- 
+
+# ggplot Visulization
+library(ggplot2)
+ggplot(Machines, aes(x = Machine, y = score, group = Worker, col = Worker)) +
+geom_point() + stat_summary(fun = mean, geom = "line") + theme_bw()
