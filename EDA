@@ -1,0 +1,14 @@
+# data: data$V1, data$V2, data$V3...
+# V1 is factorial, V2 is numerical, V3 is outcome
+
+# show different groups in V1
+levels(data$V1)
+# count $V1 in different groups
+table(data$V1)
+
+
+# main effect plot
+library(gplots)
+plotmeans(V3 ~ V1, data = data,
+xlab = "  ", ylab = "  ", main="Main effect of treatment")
+
