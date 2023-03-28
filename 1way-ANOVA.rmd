@@ -1,0 +1,64 @@
+# data: data$V1, data$V2, data$V3...
+# V1 is factorial, V2 is numerical, V3 is outcome
+
+## One-way ANOVA
+# cell mean form
+# factor effect form
+res.aov <- aov(V3 ~ V1, data = data) 
+summary(res.aov)
+ 
+# test whether there is any association between V3 and V1:
+# read Pr in ANOVA summary
+ 
+# access the information in the form of regression output using the summary.lm command.
+aov1 <- aov(V3 ~ V1, data = data)
+summary.lm(aov1)
+
+## Contrast
+# see 207 discussion3
+
+## Simultaneous inference
+# If multiple null hypotheses are tested simultaneously, the probability of falsely rejecting at least one of them increases 
+# beyond the pre-specified significance level. Therefore, we need to use simultaneous inference procedures to adjust for 
+# multiplicity and control the overall type I error rate.
+
+# pairwise t-tests with Bonferroni’s correction:
+pairwise.t.test(data$V3, data$V1, p.adjust.method="bonferroni")
+# result p-value smaller means significant difference
+
+# Multiple Tukey pairwise comparisons (The best):
+# only works for pairwise-comparison
+res.aov <- aov(V3 ~ V1, data = data) 
+TukeyHSD(res.aov)
+
+# Scheffe method for pairwise and otherwise comparisons:
+# need contrast.matrix
+ScheffeTest(res.aov, contrasts = contrast.matrix)
+
+## model diagnostics: normality and homogeneity of variance; outliers
+par(mfrow=c(2,2)) 
+plot(res.aov)
+# 1. residuals vs Fitted
+# 2. Normal QQ -> normality of error term
+# 3. scale-location
+# 4. leverage
+
+# Variance homogenerity: Barlett's or Levene's test
+bartlett.test(weight ~ group, data = PlantGrowth)
+leveneTest(weight ~ group, data = PlantGrowth)
+# if p-values less than 0.05 -> homogenerity is rejected
+
+# Variance Normality: Shapiro-Wilk normality test
+aov_residuals <- residuals(object = res.aov) 
+shapiro.test(x = aov_residuals)
+# if p-values less than 0.05 -> normality is rejected
+
+# Tuskey method: whether highest weight is significantly higher than the 2nd highest: 
+# See discussion4
+library(dplyr)
+alpha=0.05 
+PlantGrowth %>% group_by(group) %>% summarise(Mean=mean(weight))
+T.ci=TukeyHSD(res.aov,conf.level = 1-alpha) 
+T.ci$group['trt2-ctrl',]
+
+ 
