@@ -1,0 +1,48 @@
+# Logistic regression
+## see discussion9
+
+library(MASS)
+example(birthwt) # run R codes from the Examples section of R's online help topic
+
+# Likelihood ratio
+bwtfit = glm(low ~ lwt + race + smoke + ptd,family = binomial(), data = bwt)
+h0.fit = glm(low ~ lwt + race + smoke, family = binomial(), data = bwt) anova(h0.fit, bwtfit, test = 'Chi')
+
+# Devariance table
+# Sensitive to the order of parameters
+anova(glm(low ~ smoke + ptd + lwt, family = binomial(), data = bwt), test = "Chi")
+anova(glm(low ~ lwt + ptd + smoke, family = binomial(), data = bwt), test = "Chi") # change the order
+
+# Interpretation
+summary(bwtfit)
+
+# model diagnostics
+# Pearson residuals and deviance residuals
+res.P = residuals(bwtfit, type = "pearson")
+res.D = residuals(bwtfit, type = "deviance") 
+boxplot(cbind(res.P, res.D), names = c("Pearson", "Deviance"))
+# Residual plots
+par(mfrow=c(1,2))
+plot(bwtfit$fitted.values, res.P, pch=16, cex=0.6, ylab='Pearson Residuals', xlab='Fitted Values ')
+lines(smooth.spline(bwtfit$fitted.values, res.P, spar=0.9), col=2)
+abline(h=0, lty=2, col='grey')
+plot(bwtfit$fitted.values, res.D, pch=16, cex=0.6, ylab='Deviance Residuals', xlab='Fitted Value s')
+lines(smooth.spline(bwtfit$fitted.values, res.D, spar=0.9), col=2)
+abline(h=0, lty=2, col='grey')
+ 
+# Leverage points hii (diagonal of hat matrix)
+# An observation is suspected as a leverage point if hii > 2p/n where p is the number of coefficients and n is sample size.
+par(mfrow=c(1,1))
+leverage = hatvalues(bwtfit)
+plot(names(leverage), leverage, xlab="Index", type="h") points(names(leverage), leverage, pch=16, cex=0.6)
+p = length(coef(bwtfit))
+n = nrow(bwt)
+abline(h=2*p/n,col=2,lwd=2,lty=2)
+infPts = which(leverage>2*p/n)
+
+# cook's distance
+cooks = cooks.distance(bwtfit)
+plot(cooks, ylab="Cook's Distance", pch=16, cex=0.6)
+points(infPts, cooks[infPts], pch=17, cex=0.8, col=2) # influential points susPts = as.numeric(names(sort(cooks[infPts], decreasing=TRUE)[1:3])) text(susPts, cooks[susPts], susPts, adj=c(-0.1,-0.1), cex=0.7, col=4)
+ 
+# Prediction, Sensitivity and Specificity 
