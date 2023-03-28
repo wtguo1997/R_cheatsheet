@@ -61,4 +61,29 @@ PlantGrowth %>% group_by(group) %>% summarise(Mean=mean(weight))
 T.ci=TukeyHSD(res.aov,conf.level = 1-alpha) 
 T.ci$group['trt2-ctrl',]
 
+# One-way ANOVA with random effects:
+# See discussion7
+
+# fixed model:
+fit.aov = aov(weight ~ sire, data = animals) 
+summary(fit.aov)
+
+# random model:
+library(lme4)
+fit.animals = lmer(weight ~ (1 | sire), data = animals, REML = TRUE) summary(fit.animals)
+fixef(fit.animals) # extract the estimate of population mean: mu
+sqrt(diag(vcov(fit.animals))) # standard error of the estimate of population mean
+
+# Inference:
+fit.animals = lmer(weight ~ (1 | sire), data = animals) 
+fit.animals.red = lm(weight ~ 1, data = animals) anova(fit.animals, fit.animals.red)
+
+# Diagnostics
+plot(fit.animals)
+par(mfrow = c(1, 2)) 
+qqnorm(ranef(fit.animals)$sire[,"(Intercept)"],
+       main = "Random effects") 
+qqnorm(resid(fit.animals), main = "Residuals")
  
+ 
+
