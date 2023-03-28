@@ -53,3 +53,29 @@ full.model = aov(wage ~ ethnicity * occupation, data=wage)
 reduced.model = aov(wage ~ ethnicity + occupation, data=wage) 
 anova(reduced.model, full.model)
  
+## two-way ANOVA model with random effect:
+# See discussion 8
+# data: employee; batch; score
+book.url <- "https://stat.ethz.ch/~meier/teaching/book-anova" 
+quality <- readRDS(url(file.path(book.url, "data/quality.rds"))) 
+str(quality)
+
+# interaction plot
+with(quality, interaction.plot(x.factor = batch, trace.factor = employee, response = score))
+# Model fitting
+library(lme4)
+# all random:
+fit.quality = lmer(score ~ (1 | employee) + (1 | batch) + (1 | employee:batch), data = quality)
+summary(fit.quality)
+
+# Mixed effect model:
+# see discussion 8
+# data: Worker; Machine; Score
+# Mixed model: 
+fit.machines <- lmer(score ~ Machine + (1 | Worker) + (1 | Worker:Machine), data = Machines)
+anova(fit.machines)
+
+# use lmerTest to calculate p-values for the fixed effects
+library(lmerTest)
+fit.machines <- lmerTest::lmer(score ~ Machine + (1 | Worker) + (1 | Worker:Machine), data = Machines)
+anova(fit.machines)
