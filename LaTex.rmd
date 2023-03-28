@@ -1,0 +1,47 @@
+## One-way ANOVA:
+
+# Expression: $Y_{ij} = \mu + \alpha_i + \epsilon_{ij}$
+#Constrain: 
+$\{ \alpha_i\}$ satisfies that $\sum_{i=1}^{imax} n_i \alpha_i=0$ 
+# Assumption: $\{\epsilon_{i,j}\}$ are i.i.d. $N(0,\sigma^2)$
+In this model, $\alpha_i$ represent the effect from the three conditions, which are ... ($i=1$), ... ($i=2$) and ... ($i=3$). 
+The outcome $Y_{i,j}$ represents the $j$th subject under $i$th condition. 
+The mean effect $\mu$ represents the mean weight in the population. 
+The errors $\epsilon_{i,j}$ capture any unexplained effects on weights. 
+Values of $n_i$ is the numbers of data in each group i. 
+# Null hypotheis: 
+$H_0: \alpha_1 = \alpha_2 = \alpha_i = 0
+# ALternative hypothesis: 
+H_a: {\rm not \ all\ } \alpha_i\ {\rm are\ the\ zero
+
+## Two-way ANOVA
+# With interaction
+# Expression: $Y_{ijk} = \mu_{..} + \alpha_i + \beta_j +(\alpha\beta)_{ij} +\epsilon_{ijk} \ \ \ i=1,2,3 \ \ j=1,...6 \ \ k = 1,...n_{ij}$
+# No interaction:
+# Reduced model: $Y_{ijk} = \mu_{..} + \alpha_i + \beta_j +\epsilon_{ijk} \ \ \ i=1,2,3 \ \ j=1,...76, k = 1,...n_{ij}$ 
+# Constrain: 
+$\sum_i\alpha_i = \sum_j\beta_j  =\sum_i(\alpha_i\beta_j)  = \sum_j(\alpha_i\beta_j) = 0$
+$\alpha_i = \mu_{i.} - \mu_{..} \ \ \ \beta_i = \mu_{.j} - \mu_{..} \ \ \ (\alpha\beta)_{ij} = \mu_{ij} - \mu_{i.} - \mu_{.j}+\mu_{..}$
+# Assumption: the error term as i.i.d ~ $N(0,\sigma^2)$. 
+$\alpha_i$ represents the three types of ethnicity: hispanic ($i=1$), cauc ($i=2$) and other ($i=3$). 
+$\beta_j$ represents the effect from different occupations (worker, management, sales, office, services and technical). 
+$(\alpha\beta)_{ij}$ is the term describes the interaction from ethnicity and occupation type. 
+The value of $k$ depends on the number of samples under the group $n_{ij}$.
+# constrains: $\sum_i\alpha_i = \sum_j\beta_j  =\sum_i(\alpha_i\beta_j)  = \sum_j(\alpha_i\beta_j) = 0$
+$\alpha_i = \mu_{i.} - \mu_{..} \ \ \ \beta_i = \mu_{.j} - \mu_{..} 
+$\alpha_i = \mu_{i.} - \mu_{..} \ \ \ \beta_i = \mu_{.j} - \mu_{..} \ \ \ (\alpha\beta)_{ij} = \mu_{ij} - \mu_{i.} - \mu_{.j}+\mu_{..}$
+
+Null hypotheis: $$H_0: \alpha_1 = \alpha_2 = \alpha_i = 0
+ALternative hypothesis: H_a: {\rm not \ all\ } \alpha_i\ {\rm are\ the\ zero
+
+## Two-way ANOVA with random efect:
+\alpha fix, \beta random
+Expression: $Y_{ijk} = \mu_{..} + \alpha_i + \beta_j +(\alpha\beta)_{ij} +\epsilon_{ijk} \ \ \ i=1,2,3 \ \ j=1,...6 \ \ k = 1,...n_{ij}$
+
+Constrains:
+$\sum_i\alpha_i = \sum_i(\alpha_i\beta_j) = 0$
+
+Assumptions:
+$\beta_{j}$ are i.i.d. $N(0,\sigma^2_{\beta})$
+$\epsilon_{ijk}$ are i.i.d. $N(0,\sigma^2)$
+${\beta_j}$,$(\alpha\beta_{ij})$,$\epsilon_{i,j,k}$ are mutually independent
