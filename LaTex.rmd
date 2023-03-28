@@ -36,12 +36,13 @@ ALternative hypothesis: H_a: {\rm not \ all\ } \alpha_i\ {\rm are\ the\ zero
 
 ## Two-way ANOVA with random efect:
 \alpha fix, \beta random
-Expression: $Y_{ijk} = \mu_{..} + \alpha_i + \beta_j +(\alpha\beta)_{ij} +\epsilon_{ijk} \ \ \ i=1,2,3 \ \ j=1,...6 \ \ k = 1,...n_{ij}$
+# Expression: 
+$Y_{ijk} = \mu_{..} + \alpha_i + \beta_j +(\alpha\beta)_{ij} +\epsilon_{ijk} \ \ \ i=1,2,3 \ \ j=1,...6 \ \ k = 1,...n_{ij}$
 
-Constrains:
+# Constrains:
 $\sum_i\alpha_i = \sum_i(\alpha_i\beta_j) = 0$
 
-Assumptions:
+# Assumptions:
 $\beta_{j}$ are i.i.d. $N(0,\sigma^2_{\beta})$
 $\epsilon_{ijk}$ are i.i.d. $N(0,\sigma^2)$
 ${\beta_j}$,$(\alpha\beta_{ij})$,$\epsilon_{i,j,k}$ are mutually independent
