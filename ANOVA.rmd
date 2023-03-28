@@ -1,15 +1,29 @@
 # data: data$V1, data$V2, data$V3...
 # V1 is factorial, V2 is numerical, V3 is outcome
 
-# One-way ANOVA
+## One-way ANOVA
+# cell mean form
+# factor effect form
 res.aov <- aov(V3 ~ V1, data = data) 
 summary(res.aov)
  
- # test whether there is any association between V3 and V1:
- # read Pr in ANOVA summary
+# test whether there is any association between V3 and V1:
+# read Pr in ANOVA summary
  
- # access the information in the form of regression output using the summary.lm command.
+# access the information in the form of regression output using the summary.lm command.
 aov1 <- aov(V3 ~ V1, data = data)
 summary.lm(aov1)
 
-# Contrast
+## Contrast
+# see 207 discussion3
+
+## Simultaneous inference
+# If multiple null hypotheses are tested simultaneously, the probability of falsely rejecting at least one of them increases 
+# beyond the pre-specified significance level. Therefore, we need to use simultaneous inference procedures to adjust for 
+# multiplicity and control the overall type I error rate.
+
+# pairwise t-tests with Bonferroni’s correction:
+pairwise.t.test(data$V3, data$V1, p.adjust.method="bonferroni")
+# result p-value smaller means significant difference
+
+# Multiple Tukey pairwise comparisons:
