@@ -1,0 +1,55 @@
+# consider data 
+
+# Two-way ANOVA with fixed effects 
+model1 = aov(len ~ supp + dose, data = dat)
+
+ 
+library(gplots)
+par(mfrow=c(1,3))
+plotmeans(len~supp,data=dat,xlab="Supplement",ylab="Tooth Length", main="Main effect, Supplement")
+plotmeans(len~dose,data=dat,xlab="Dose",ylab="Tooth Length", main="Main effect, Dose" )
+dose=dat$dose
+supp=dat$supp
+len=dat$len
+interaction.plot(supp,dose,len,xlab="Supplement",ylab="Tooth Length", main="Interacti on")
+
+# Modeling
+model2 <- aov(len ~ supp * dose, data = dat) 
+summary(model2)
+
+# Tukey-Kramer method: explore what the best combination of supplement and dose
+T.ci=TukeyHSD(model2,conf.level = 0.95) par(mfrow=c(2,2))
+plot(T.ci, las=1 , col="brown")
+ 
+# Only show all pairwise comparisons in factor dose
+TukeyHSD(model2, which = "dose")
+ 
+idx=list(); 
+idx[[1]]=dat$supp;idx[[2]]=dat$dose; 
+(means.comb=tapply(dat$len, INDEX=idx,mean))
+T.ci[['supp:dose']]['VC:D2-OJ:D2',]
+ 
+# Diagnostics
+par(mfrow=c(2,2)) 
+plot(model2)
+library(car)
+
+# homogenerity
+leveneTest(len ~ supp*dose, data = dat)
+
+# normality with Shapiro-Wilk test:
+model2.residuals = residuals(model2) 
+shapiro.test(model2.residuals)
+
+# TypeI, II, III ANOVA (See discussion7)
+fit1 = aov(wage ~ ethnicity + occupation + ethnicity:occupation, data=wage) summary(fit1)
+
+Anova(lm(wage ~ ethnicity + occupation, data=wage), type = 'II')
+
+Anova(lm(wage ~ 0 + ethnicity * occupation, data=wage),type = 'III')
+
+# test interaction term:
+full.model = aov(wage ~ ethnicity * occupation, data=wage) 
+reduced.model = aov(wage ~ ethnicity + occupation, data=wage) 
+anova(reduced.model, full.model)
+ 
