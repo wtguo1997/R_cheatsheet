@@ -19,3 +19,11 @@ boxplot(len ~ supp * dose, data=dat, frame = FALSE, col = c("#00AFBB", "#E7B800"
 library(ggplot2)
 ggplot(Machines, aes(x = Machine, y = score, group = Worker, col = Worker)) +
 geom_point() + stat_summary(fun = mean, geom = "line") + theme_bw()
+
+# ggplot color and shape
+ggplot(mpg, aes(x = displ, y = hwy, color = drv, shape = drv, linetype = drv)) +
+    geom_smooth(se = F, method = 'loess') + 
+    geom_point() + 
+    scale_linetype_manual(values = c('twodash', 'longdash', 'dashed')) + 
+    theme_bw() + 
+    scale_color_manual(values = c("#0073C2FF", "#EFC000FF", "#868686FF"))
