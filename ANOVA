@@ -1,0 +1,15 @@
+# data: data$V1, data$V2, data$V3...
+# V1 is factorial, V2 is numerical, V3 is outcome
+
+# One-way ANOVA
+res.aov <- aov(V3 ~ V1, data = data) 
+summary(res.aov)
+ 
+ # test whether there is any association between V3 and V1:
+ # read Pr in ANOVA summary
+ 
+ # access the information in the form of regression output using the summary.lm command.
+aov1 <- aov(V3 ~ V1, data = data)
+summary.lm(aov1)
+
+# Contrast
