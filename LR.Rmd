@@ -19,6 +19,9 @@ cor(data)
 Model1 <- lm(Y~X1+X2,data=data)
 summary(Model1)
 
+# boxcox
+boxcox(lm(mpg~cylinders+horsepower+weight,data=data))
+
 # model diagnostics
 par(mfrow=c(2,2))
 plot(Model1,which = 1)
