@@ -27,3 +27,14 @@ ggplot(mpg, aes(x = displ, y = hwy, color = drv, shape = drv, linetype = drv)) +
     scale_linetype_manual(values = c('twodash', 'longdash', 'dashed')) + 
     theme_bw() + 
     scale_color_manual(values = c("#0073C2FF", "#EFC000FF", "#868686FF"))
+    
+# interaction plot
+interaction.plot(x.factor = Wage$occupation, #x-axis variable
+                 trace.factor = Wage$ethnicity, #variable for lines
+                 response = Wage$wage, #y-axis variable
+                 ylab = "Wage",
+                 xlab = "occupation",
+                 col = c("pink", "blue","yellow"),
+                 lty = 1, #line type
+                 lwd = 2, #line width
+                 trace.label = "ethnicity")
