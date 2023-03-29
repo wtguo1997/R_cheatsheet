@@ -1,0 +1,201 @@
+---
+title: "MS Comprehensive Exam 2022"
+date: "STA 207  (100 points)"
+output: html_document
+---
+
+<span style="color:red">**Read the instructions on Canvas carefully!**</span>
+
+___
+
+**Name**: 
+
+**Student ID**: 
+
+___
+
+```{r,echo=T,results=F,message=F}
+library(lme4)
+library(dplyr)
+library(ggplot2)
+library(car)
+library(ggResidpanel)
+```
+
+In this exam, we investigate the `ChickWeight` dataset in `R`. You can load the data using the following commands. Carefully read the help file of `ChickWeight` before working on the following questions. 
+```{r, echo=T}
+data(ChickWeight)
+```
+
+***
+
+**(a) Briefly summarize all variables in the data set. You need to provide the definition of the variable and quantitative summary. **
+
+<b> Solution: </b>  (Type your answer here)
+
+
+```{r}
+# (a). (Type your code in the space below, if any)
+data=ChickWeight
+summary(data)
+```
+
+**(b) Visualize the weights of each chicks over time in one plot, where (i) each chick is represented by one solid curve, and (ii) the `diet` is color-coded as black (1), red (2), green (3), and blue (4). In addition to the required visualization, you may add any supporting curves, symbols, or any additional plots that you find informative.**
+	
+<b> Solution: </b>  (Type your answer here)
+
+
+```{r}
+# (b). (Type your code in the space below, if any)
+ggplot(data=ChickWeight,aes(x=Time,y=weight, color=factor(Diet))) + geom_line(aes(group = Chick))+scale_color_manual(values = c("black", "red", "green", "blue"))+labs(title='Weights of Each Chick over Time')
+```
+
+
+***
+
+
+
+**(c) Write down an appropriate one-way ANOVA model to answer the question whether there is any changes in mean weights at Day 20 across the four diet group. To receive full credits, you need to (i) write down the model, explain your notation, constraint(s) and/or assumptions; (ii) state the null and alternative hypotheses; (iii) state the test result. You can find basic LaTeX commands at the end of this file.  **
+
+
+<b> Solution: </b>  (Type your answer here)
+
+$$y_{ij}=\mu+\alpha_i+\epsilon_{ij}$$
+
+$\mu:$ overall mean
+
+$\alpha_i:$ the factor effect of population (diet) i on response satisfies $\sum_{i=1}^4 n_i\alpha_i=0$
+
+$\epsilon_{ij}:$ error term of the $j_{th}$ individual in $i_{th}$ diet.
+
+$y_{ij}:$ the weight of the $j_{th}$ individual with diet $i$.
+
+```{r}
+# (c). (Type your code in the space below, if any)
+fit <- lm(data=data[data$Time==20,],weight~Diet)
+anova(fit)
+```
+
+$H_0:\alpha_1=\alpha_2=\alpha_3=\alpha_4=0$ v.s. $H_a:$ not all $\alpha_i=0,i=1,2,3,4$.
+
+Test statistic:
+
+$F^*=\frac{SSTR/df(SSTR)}{SSE/df(SSE)}\sim_{H_0}F_{k-1,n-k}$ where $n=46,k=4,SSTR=\sum_{i=1}^4(\bar{Y}_{i\cdot}-\bar{Y}_{\cdot\cdot})^2, SSE=\sum_{i=1}^4\sum_{j=1}^{n_i}(Y_{ij}-\bar{Y}_{i\cdot})^2$
+
+```{r}
+qf(0.95,3,42)
+```
+
+$F^*=\frac{55881/3}{143190/42}=5.463608>2.827049$
+
+Based on the result of the hypothesis testing performed above, we reject the null hypothesis and conclude that not all $a_{i}=0,i=1,2,3,4$ at significance level 0.05.
+
+**(d) For the model fitted in (c), carry out necessary diagnostics to check if the model assumptions are valid. What are your findings?**
+
+<b> Solution: </b>  (Type your answer here)
+
+
+```{r,echo=FALSE,results=FALSE,message=FALSE}
+resid_interact(fit, plots = c("resid", "qq","hist"))
+```
+
+The residual plots show no obvious non-linearity. It can be seen that the residuals histogram seem to have normal distribution. The Q-Q plot shows that the normality assumption seems to be adequate.
+
+To test the homogeneity of variance, we conducted Levene's test:
+
+```{r}
+leveneTest(data=data[data$Time==20,],weight~Diet)
+```
+
+Since $0.3553>0.05$, homogeneity of variance is adequate at significance level 0.05.
+
+To test the normality assumptions we conduct  Shapiro-Wilk normality test:
+
+```{r}
+aov_residuals <- residuals(object = fit)
+shapiro.test(x = aov_residuals )
+```
+
+Since $0.8378>0.05$, the normality assumptions is adequate.
+
+
+**(e) Write down an appropriate two-way ANOVA model with fixed effect to answer the question whether there is any differences in growth rates across the four diet groups. Here the growth rate can be roughly seen as the effects of `Time` on `weight`. To receive full credits, you need to (i) write down the model, explain your notation, constraint(s) and/or assumptions; (ii) state the null and alternative hypotheses; (iii) state the test result. Hint: You may want to recycle the answer in (c) to save time. **
+
+
+<b> Solution: </b>  (Type your answer here)
+
+$$Y_{ijk}=\mu_{..}+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk},\quad k=1,\cdots,n_{ij},j=1,\cdots,12,i=1,\cdots,4$$
+
+$\sum_{i=1}^{4}a_i=0,\quad\sum_{j=1}^{12}\beta_j=0,\sum_{i=1}^{4}(\alpha\beta)_{i,j}=\sum_{j=1}^{12}(\alpha\beta)_{ij}=0$
+
+$Y_{ijk}$ represents the weight of $k_{th}$ individual with diet type $i$ at time $j$
+
+$\mu_{..}$ denotes the overall mean weight across all time and diet type.
+
+$\alpha_i$ is the effect of $i_{th}$ diet, representing the difference between the mean of $Y_{ijk}$ for the $i_{th}$ diet and the overall mean. 
+
+$\beta_j$ is the effect of $j_{th}$ time, representing the difference between the mean of $Y_{ijk}$ for the $j_{th}$ time and the overall mean. 
+
+$(\alpha\beta)_{ij}$ is the interaction effect between the $i_{th}$ diet and the $j_{th}$ time, representing the deviation of the mean of $Y_{ijk}$ for the combination of the $i_{th}$ diet and the $j_{th}$ time from what would be expected based on the main effects alone.
+
+$\epsilon_{ijk}\sim N(0,\sigma^2)$s are the error terms
+
+Hypothesis:
+
+$H_0:(\alpha\beta)_{ij}=0,j=1,\cdots,12,i=1,\cdots,4$  V.S. $H_a:$ not all $(\alpha\beta)_{ij}=0,j=1,\cdots,12,i=1,\cdots,4$
+
+To test $H_0$, we build a Full model and a reduced model:
+
+Full model:
+
+$$Y_{ijk}=\mu_{..}+\alpha_i+\beta_j+(\alpha\beta)_{ij}+\epsilon_{ijk},\quad k=1,\cdots,n_{ij},j=1,\cdots,12,i=1,\cdots,4$$
+
+Reduced model:
+
+$$Y_{ijk}=\mu_{..}+\alpha_i+\beta_j+\epsilon_{ijk},\quad k=1,\cdots,n_{ij},j=1,\cdots,12,i=1,\cdots,4$$
+
+All the notation of full model and reduced model are the same except that there are no interaction terms in reduced model.
+
+```{r}
+# (e). (Type your code in the space below, if any)
+fit1 <- lm(data=data,weight~Diet+as.factor(Time)+Diet:as.factor(Time))
+fit2 <- lm(data=data,weight~Diet+Time)
+anova(fit2,fit1)
+```
+
+test statistics: $F^*=\frac{(SSE(R)-SSE(F))/(df_R-df_F)}{SSE(F)/df_F}\sim_{H_0}(df_R-df_F,df_F)$
+
+$F^*=\frac{(742336-631110)/43}{631110/530}=2.172244,F(0.95,43,530)=1.402822$. Since $2.17>1.40$, we include that the interaction term is significant at level 0.05. In other words there is difference in growth rates across the four diet groups at significance level 0.05.
+
+
+***
+
+**(f) We want to take the chick-specific effect into account. The new mixed effect model is based on the model in (e), where `Time` is treated as a continuous covariate instead of a categorical factor, and a random intercept and a random slope (of `Time`) are added into the model. Report the fitted coefficients of the fixed effects, and summarize your findings from this model. Hint: You do not need to write down the new model, but you may find it helpful.  **
+
+<b> Solution: </b>  (Type your answer here)
+
+
+```{r}
+# (f). (Type your code in the space below, if any)
+data$Time <- as.numeric(data$Time)
+fit3 <- lmer(data=data,weight~ Diet + Time:Diet +(1+Time|Chick))
+summary(fit3)
+```
+
+
+***
+
+**(g) Assume that the chicks in each diet are randomly selected from the same population, i.e., the enrollment of chicks is independent from any other factors. State the Stable Unit Treatment Value Assumption, write down the potential outcomes (weight at Day 20), and verify whether the randomization assumption holds. (This question will be replaced by another, since causal inference will not be covered this quarter.)** 
+	
+
+<b> Solution: </b>  (Type your answer here) 
+
+
+
+
+***
+
+**LaTeX commands**
+
+$$Y_{i,j,k}, \mu, \alpha, \beta, \epsilon, i, j, H_0, H_a, \neq, =, \ldots$$
+
