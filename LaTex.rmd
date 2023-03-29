@@ -34,6 +34,11 @@ $\alpha_i = \mu_{i.} - \mu_{..} \ \ \ \beta_i = \mu_{.j} - \mu_{..} \ \ \ (\alph
 Null hypotheis: $$H_0: \alpha_1 = \alpha_2 = \alpha_i = 0
 ALternative hypothesis: H_a: {\rm not \ all\ } \alpha_i\ {\rm are\ the\ zero
 
+# Inference:
+ $$H_0: \alpha\beta_{ij} = 0 \forall ij$$
+ $$H_a: not all \alpha\beta_{ij} = 0
+
+
 ## Two-way ANOVA with random efect:
 \alpha fix, \beta random
 # Expression: 
