@@ -16,6 +16,7 @@ interaction.plot(supp,dose,len,xlab="Supplement",ylab="Tooth Length", main="Inte
 # Modeling
 model2 <- aov(len ~ supp * dose, data = dat) 
 summary(model2)
+summary(aov_fit_mixed)$coefficients
 
 # Tukey-Kramer method: explore what the best combination of supplement and dose
 T.ci=TukeyHSD(model2,conf.level = 0.95) par(mfrow=c(2,2))
