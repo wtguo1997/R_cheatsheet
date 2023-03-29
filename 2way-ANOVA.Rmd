@@ -32,6 +32,10 @@ T.ci[['supp:dose']]['VC:D2-OJ:D2',]
 # Inference
 # F-test for interactions
 # The F-statistics is F∗ = MSAB/MSE. Under the null, F∗ follows an F -distribution with df = ((a−1)(b−1),(n−1)ab).
+aov.full=aov(wage~ethnicity+occupation+ethnicity*occupation,data=Wage);
+summary(aov.full)
+aov.red<-aov(wage~occupation,data=Wage)
+anova(aov.red,aov.full)
 # Test for the main effect of factor A 
 # F∗ = MSA/MSE that follows an F-distribution with df = (a − 1, (n − 1)ab).
  
