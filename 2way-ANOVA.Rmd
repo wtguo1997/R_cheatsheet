@@ -29,6 +29,12 @@ idx[[1]]=dat$supp;idx[[2]]=dat$dose;
 (means.comb=tapply(dat$len, INDEX=idx,mean))
 T.ci[['supp:dose']]['VC:D2-OJ:D2',]
  
+# Inference
+# F-test for interactions
+# The F-statistics is F∗ = MSAB/MSE. Under the null, F∗ follows an F -distribution with df = ((a−1)(b−1),(n−1)ab).
+# Test for the main effect of factor A 
+# F∗ = MSA/MSE that follows an F-distribution with df = (a − 1, (n − 1)ab).
+ 
 # Diagnostics
 par(mfrow=c(2,2)) 
 plot(model2)
